@@ -6,7 +6,7 @@ import 'firebase/auth'
 
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
-import { merge } from 'rxjs';
+
 
 firebase.initializeApp({
   apiKey: "AIzaSyB5CzkbA-FFLEAZ1IM83W2acAHcoc_LQV8",
@@ -28,8 +28,11 @@ function App() {
   return (
     <div className="App">
       <header>
-       
+       <h1>Tack-Chat</h1>
+       <SignOut />
+
       </header>
+
       <section>
         {user ? <ChatRoom /> : <SignIn />}
       </section>
@@ -51,15 +54,14 @@ function SignIn() {
 
 function SignOut() {
   return auth.currentUser && (
-
-    <button>Sign Out</button>
+    <button className="sign-out" onClick={() => auth.signOut()}>Sign Out</button>
   )
 }
 
 function ChatRoom() {
 
   const messagesRef = firestore.collection('messages')
-  const query = messagesRef.orederBy('creatAt').limit(25)
+  const query = messagesRef.orderBy('creatAt').limit(25)
 
   const [messages] = useCollectionData(query, {idField: 'id'})
   const [formValue, setFormValue] = useState('')
